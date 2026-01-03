@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: samsung;
+  src: url(./assets/font/samsungsharpsans-medium.otf);
+}
+
+@theme {
+  --font-samsung: samsung;
+}
