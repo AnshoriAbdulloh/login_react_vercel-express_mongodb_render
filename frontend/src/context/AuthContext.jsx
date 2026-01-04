@@ -10,16 +10,11 @@ export function AuthProvider({ children }) {
   // ambil token sekali saja
   const [token, setToken] = useState(localStorage.getItem(`accessToken`));
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(!!token);
+  const loading = !!token && user === null;
 
   // cek token saat reload
   useEffect(() => {
-    if (!token) {
-      console.log(`Token tidak ada`);
-      return;
-    }
-    console.log(`Cek token di AuthContext: ${token}`);
-    setLoading(true);
+    if (!token) return;
 
     // ambil data user dari backend
     fetch("http://localhost:5001/me", {
@@ -40,9 +35,6 @@ export function AuthProvider({ children }) {
         localStorage.removeItem("accessToken");
         setUser(null);
         setToken(null);
-      })
-      .finally(() => {
-        setLoading(false);
       });
   }, [token]);
 
@@ -55,7 +47,6 @@ export function AuthProvider({ children }) {
   // LOGIN
   const login = (accessToken) => {
     localStorage.setItem("accessToken", accessToken);
-    setLoading(true);
     setToken(accessToken);
     console.log(`sudah ke dashboard`);
   };

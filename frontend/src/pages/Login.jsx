@@ -9,7 +9,7 @@ import { FaFacebook, FaGithub, FaGoogle, FaLinkedin } from "react-icons/fa";
 export default function Login() {
   const { login } = useAuth();
 
-  const [sign, setSign] = useState(false);
+  const [sign, setSign] = useState(false); // state berpindah sign in dan register
   const [formLogin, setFormLogin] = useState({
     email: ``,
     password: ``,
@@ -20,7 +20,7 @@ export default function Login() {
     password: ``,
   });
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   function handleChangeLogin(e) {
     const { name, value } = e.target;
@@ -66,7 +66,6 @@ export default function Login() {
       }
 
       // SIMPAN TOKEN
-      console.log(`data: ${JSON.stringify(data)}`);
       login(data.accessToken);
     } catch (err) {
       // masuk sini kalau server mati, cors error, respon bukan json, fetch gagal
