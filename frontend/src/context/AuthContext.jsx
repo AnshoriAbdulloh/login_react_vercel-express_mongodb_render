@@ -5,20 +5,24 @@ import { useNavigate } from "react-router-dom";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
+  const navigate = useNavigate();
   console.log(`Masuk ke AuthContext`);
   // ambil token sekali saja
-  const token = localStorage.getItem("accessToken");
-
+  const [token, setToken] = useState(localStorage.getItem(`accessToken`));
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(!!token); // menggunakan 2 tanda seru agar nilai booleannya sama dengan datanya
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(!!token);
 
   // cek token saat reload
   useEffect(() => {
-    if (!token) return;
+    if (!token) {
+      console.log(`Token tidak ada`);
+      return;
+    }
+    console.log(`Cek token di AuthContext: ${token}`);
+    setLoading(true);
 
     // ambil data user dari backend
-    fetch("http://localhost:5001/dashboard", {
+    fetch("http://localhost:5001/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -29,22 +33,31 @@ export function AuthProvider({ children }) {
         return res.json();
       })
       .then((data) => {
-        setUser(data.user);
+        console.log(`set user ${JSON.stringify(data)}`);
+        setUser(data.username);
       })
       .catch(() => {
         localStorage.removeItem("accessToken");
         setUser(null);
+        setToken(null);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [token]);
+
+  useEffect(() => {
+    if (user && !loading) {
+      navigate("/dashboard");
+    }
+  }, [user, loading]);
 
   // LOGIN
-  const login = (accessToken, userData) => {
+  const login = (accessToken) => {
     localStorage.setItem("accessToken", accessToken);
-    setUser(userData);
-    navigate("/dashboard");
+    setLoading(true);
+    setToken(accessToken);
+    console.log(`sudah ke dashboard`);
   };
 
   // LOGOUT

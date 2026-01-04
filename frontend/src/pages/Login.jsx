@@ -23,7 +23,6 @@ export default function Login() {
   const navigate = useNavigate();
 
   function handleChangeLogin(e) {
-    console.log(e.target);
     const { name, value } = e.target;
 
     setFormLogin((prev) => ({
@@ -32,7 +31,6 @@ export default function Login() {
     }));
   }
   function handleChangeRegister(e) {
-    console.log(e.target);
     const { name, value } = e.target;
 
     setFormRegister((prev) => ({
@@ -68,10 +66,8 @@ export default function Login() {
       }
 
       // SIMPAN TOKEN
-      console.log(data);
-      login(data.accessToken, data.user);
-      // PINDAH HALAMAN
-      navigate(`/dashboard`);
+      console.log(`data: ${JSON.stringify(data)}`);
+      login(data.accessToken);
     } catch (err) {
       // masuk sini kalau server mati, cors error, respon bukan json, fetch gagal
       // (bukan untuk salah password)
