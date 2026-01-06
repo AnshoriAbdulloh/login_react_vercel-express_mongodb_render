@@ -73,3 +73,12 @@ export async function me(req, res) {
     res.sendStatus(401);
   }
 }
+
+export async function logout(req, res) {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+  });
+  res.json({ message: "Logout success" });
+}
